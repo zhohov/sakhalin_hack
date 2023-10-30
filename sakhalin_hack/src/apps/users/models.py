@@ -4,7 +4,6 @@ from django.contrib.auth.models import AbstractUser
 
 class Company(models.Model):
     name = models.CharField(verbose_name='Название')
-    address = models.TextField(verbose_name='Адрес')
 
     class Meta:
         verbose_name = 'Управляющая компания'
@@ -15,6 +14,10 @@ class Company(models.Model):
 
 
 class CustomUser(AbstractUser):
-    photo = models.ImageField(verbose_name='Фото профиля', upload_to='./cleaners_photo/')
-    company = models.ManyToManyField(Company)
-    phone_number = models.CharField(verbose_name='Номер телефона', null=True)
+    photo = models.ImageField(verbose_name='Фото профиля', upload_to='./cleaners_photo/', blank=True)
+    company = models.ManyToManyField(Company, blank=True)
+    phone_number = models.CharField(verbose_name='Номер телефона', null=True, blank=True)
+
+    def __str__(self) -> str:
+        return f'{self.last_name} {self.first_name}'
+

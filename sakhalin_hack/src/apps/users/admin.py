@@ -1,26 +1,35 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
 
-from .models import Company, CustomUser, Clearing
+from .models import Company, CustomUser
 
 
-class CustomUserAdmin(admin.ModelAdmin):
+class CustomUserAdmin(UserAdmin):
     list_filter = [
         'company',
         'groups',
     ]
 
     list_display = (
+        'username',
         'first_name',
         'last_name',
     )
 
-
-class ClearingAdmin(admin.ModelAdmin):
-    list_filter = [
-        'cleaner',
-    ]
+    fieldsets = (
+        *UserAdmin.fieldsets,
+        (
+            None,
+            {
+                'fields': (
+                    'photo',
+                    'phone_number',
+                    'company'
+                ),
+            },
+        ),
+    )
 
 
 admin.site.register(Company)
 admin.site.register(CustomUser, CustomUserAdmin)
-admin.site.register(Clearing, ClearingAdmin)
