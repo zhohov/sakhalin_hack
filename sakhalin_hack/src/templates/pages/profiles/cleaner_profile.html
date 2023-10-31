@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Здравствуйте, {{ user }}</h1>
+<a href="{% url 'logout' %}">logout</a>
+<h3>Ваши задачи:</h3>
+<div>
+    <table class="table">
+        <thead>
+            <tr>
+              <th scope="col">id</th>
+              <th scope="col">Адрес</th>
+              <th scope="col">Исполнитель</th>
+              <th scope="col">Отчет</th>
+            </tr>
+          </thead>
+        <tbody>
+        {% for task in tasks %}
+            {% for address in task.address.all %}
+                <tr>
+                    <th scope="row">{{ task.id }}</th>
+                    <td>{{ address.city }}, {{ address.district }}, {{ address.street }}</td>
+                    <td>{{ user }}</td>
+                    <td><a href="{% url 'tasks:task_report' task.id %}">Отчет</a></td>
+                </tr>
+            {% endfor %}
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}
