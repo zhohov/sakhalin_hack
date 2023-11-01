@@ -19,10 +19,18 @@ class Address(models.Model):
 
 
 class Task(models.Model):
-    cleaner = models.ForeignKey(CustomUser, verbose_name='Исполнитель', on_delete=models.CASCADE, related_name="task_cleaner")
-    manager = models.ForeignKey(CustomUser, verbose_name='Заказчик', on_delete=models.CASCADE, related_name='task_manager')
+    cleaner = models.ForeignKey(CustomUser,
+                                verbose_name='Исполнитель',
+                                on_delete=models.CASCADE,
+                                related_name="task_cleaner"
+                                )
+    manager = models.ForeignKey(CustomUser,
+                                verbose_name='Заказчик',
+                                on_delete=models.CASCADE,
+                                related_name='task_manager'
+                                )
     address = models.ManyToManyField(Address)
-    date = models.DateTimeField()
+    date = models.DateTimeField(verbose_name='Дата и время')
     notes = models.TextField(verbose_name='Приечания', null=True, blank=True)
     is_active = models.BooleanField(verbose_name='Активная задача', default=True)
 
@@ -31,10 +39,7 @@ class Task(models.Model):
         verbose_name_plural = 'Задачи'
 
     def __str__(self):
-        return f'id задачи: {self.id}, исполнитель: {self.cleaner.username}'
-
-    def get_absolute_url(self):
-        return reverse('tasks/task_report', kwargs={'task_id': self.id})
+        return f'id задачи: {self.id}, исполнитель: {self.cleaner.__str__}'
 
 
 class CompletedTask(models.Model):
@@ -52,8 +57,18 @@ class CompletedTask(models.Model):
 
     photo = models.ImageField(verbose_name='Фото уборки', upload_to='./clearing_photo/%Y/%m/%d/', blank=True)
     task = models.ForeignKey(Task, verbose_name='Задача', on_delete=models.CASCADE)
-    cleaner = models.ForeignKey(CustomUser, verbose_name='Исполнитель', on_delete=models.CASCADE, related_name='report_cleaner')
-    manager = models.ForeignKey(CustomUser, verbose_name='заказчик', on_delete=models.CASCADE, related_name='report_manager')
+
+    cleaner = models.ForeignKey(CustomUser,
+                                verbose_name='Исполнитель',
+                                on_delete=models.CASCADE,
+                                related_name='report_cleaner'
+                                )
+    manager = models.ForeignKey(CustomUser,
+                                verbose_name='заказчик',
+                                on_delete=models.CASCADE,
+                                related_name='report_manager'
+                                )
+
     address = models.ManyToManyField(Address, verbose_name='Адрес')
     date = models.DateTimeField(verbose_name='Дата выполнения')
 
