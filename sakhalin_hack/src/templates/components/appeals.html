@@ -1,0 +1,12 @@
+{% block content %}
+<div class="pt-5">
+    <h3>Ваши обращения:</h3>
+    {% if appears %}
+        <p>Обращение</p>
+    {% else %}
+        <p>Вы еще не отправили ни одного обращения</p>
+    {% endif %}
+
+    <a href="" class="btn btn-primary">Добавить обращение</a>
+</div>
+{% endblock %}

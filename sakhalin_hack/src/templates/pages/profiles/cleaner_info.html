@@ -1,10 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Здравствуйте, {{ user }}</h1>
-<a href="{% url 'logout' %}">logout</a>
-<h3>Ваши задачи:</h3>
+<h3>Задачи {{ cleaner.last_name }} {{ cleaner.first_name }}</h3>
 <div>
+    <a href="{% url 'tasks:add_task' cleaner.id %}" class="btn btn-primary">Добавить задачу</a>
     <table class="table">
         <thead>
             <tr>
@@ -17,31 +16,22 @@
         <tbody>
         {% for task in tasks %}
             {% for address in task.address.all %}
-                {% if task.is_active %}
+                {% if task.is_active%}
                     <tr>
                         <th scope="row">{{ task.id }}</th>
                         <td>{{ address.city }}, {{ address.district }}, {{ address.street }}</td>
-                        <td>{{ user }}</td>
-                        <td><a href="{% url 'tasks:task_report' task.id %}">Добавить отчет</a></td>
+                        <td>{{ cleaner.last_name }} {{ cleaner.first_name }}</td>
                     </tr>
                 {% else %}
                     <tr class="table-success">
                         <th scope="row">{{ task.id }}</th>
                         <td>{{ address.city }}, {{ address.district }}, {{ address.street }}</td>
-                        <td>{{ user }}</td>
-                        <td><a href="{% url 'tasks:task_report' task.id %}">Посмотреть отчет</a></td>
+                        <td>{{ cleaner.last_name }} {{ cleaner.first_name }}</td>
+                        <td><a href="{% url 'tasks:view_report' task.id %}">Отчет</a></td>
                     </tr>
                 {% endif %}
             {% endfor %}
         {% endfor %}
     </table>
-
-    <h3>Ваши обращения:</h3>
-    {% if appears %}
-        <p>Обращение</p>
-    {% else %}
-        <p>Вы еще не отправили ни одного обращения</p>
-    {% endif %}
-    <a href="" class="btn btn-primary">Добавить обращение</a>
 </div>
 {% endblock %}

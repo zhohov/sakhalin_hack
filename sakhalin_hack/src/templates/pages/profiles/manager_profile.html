@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Здравствуйте, {{ user }}</h1>
+<a href="{% url 'logout' %}">logout</a>
+<div class="pt-5">
+    <h3>Дворники</h3>
+    <table class="table">
+        <thead>
+            <tr>
+              <th scope="col">id</th>
+              <th scope="col">ФИО</th>
+              <th scope="col">Информация</th>
+            </tr>
+          </thead>
+        <tbody>
+        {% for cleaner in cleaners %}
+            <tr>
+                <th scope="row">{{ cleaner.id }}</th>
+                <td>{{ cleaner.last_name }} {{ cleaner.first_name }}</td>
+                <td><a href="{% url 'tasks:get_cleaner_tasks' cleaner.id %}">Задачи</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
+{% include 'components/appeals.html' %}
+{% endblock %}
