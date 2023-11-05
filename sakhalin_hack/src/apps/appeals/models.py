@@ -19,17 +19,21 @@ class Appeal(models.Model):
 
     date = models.DateTimeField(verbose_name='Дата и время')
 
+    is_active = models.BooleanField(verbose_name='Активное обращение', default=True)
+
     class Meta:
         verbose_name = 'Обращение'
         verbose_name_plural = 'Обращения'
+        ordering = ('-date',)
 
     def __str__(self) -> str:
         return f'Тема: {self.theme}, от: {self.sender}'
 
 
 class AppealAnswer(models.Model):
-    theme = models.CharField(verbose_name='Тема обращения', null=False)
-    text = models.TextField(verbose_name='Текст обращения', null=False)
+    appeal = models.ForeignKey(Appeal, verbose_name='Обращение', on_delete=models.CASCADE)
+    theme = models.CharField(verbose_name='Тема ответа', null=False)
+    text = models.TextField(verbose_name='Текст ответа', null=False)
 
     sender = models.ForeignKey(CustomUser,
                                verbose_name='Отправитель',
@@ -44,8 +48,9 @@ class AppealAnswer(models.Model):
     date = models.DateTimeField(verbose_name='Дата и время')
 
     class Meta:
-        verbose_name = 'Обращение'
-        verbose_name_plural = 'Обращения'
+        verbose_name = 'Ответ на обращение'
+        verbose_name_plural = 'Ответы на обращения'
+        ordering = ('-date',)
 
     def __str__(self) -> str:
         return f'Тема: {self.theme}, от: {self.sender}'

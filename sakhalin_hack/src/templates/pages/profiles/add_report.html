@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<p>{{ task.id }}</p>
+<h3>Добавить отчет для задачи #{{ task.id }}</h3>
 
 <form action="{% url 'tasks:task_report' task.id %}" method="post" enctype="multipart/form-data">
     {{ form.as_p }}
     {% csrf_token %}
-    <button type="submit" class="btn btn-success">submit</button>
+    <button type="submit" class="btn btn-success">Отправить</button>
 </form>
 
 {% endblock %}

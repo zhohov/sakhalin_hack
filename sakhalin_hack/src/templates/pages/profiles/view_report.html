@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h3>Отчет по задаче: #{{ task.id }}</h3>
+<div>
+    <p>Фото:</p>
+    {% if report.photo %}
+        <img src="{{ report.photo.url }}" style="width: 300px;">
+    {% else %}
+        <p>Фото отстутствует</p>
+    {% endif %}
+    {% if report.photo2 %}
+        <img src="{{ report.photo2.url }}" style="width: 300px;">
+    {% endif %}
+    {% if report.photo3 %}
+        <img src="{{ report.photo3.url }}" style="width: 300px;">
+    {% endif %}
+    <div class="pt-5">
+        <p>Исполнитель: {{ report.cleaner }}</p>
+        <p>Заказчик: {{ report.manager }}</p>
+        <p>Дата и время выполнения: {{ report.date }}</p>
+        <p>Статус: {{ report.marks }}</p>
+        <p>Примечания: {{ report.notes }}</p>
+        {% if report.verified_address == False %}
+            <p>Проверка адреса: Не пройдена</p>
+        {% else %}
+            <p>Проверка адреса: Пройдена</p>
+        {% endif %}
+    </div>
+
+    <h5 class="pt-5">Выполненная работа на карте:</h5>
+
+    {% if report.coord1 %}
+
+        <div class="mt-3" id="YMapsID" style="width:600px;height:400px"></div>
+        <script type="text/javascript">
+            // Создает обработчик события window.onLoad
+            YMaps.jQuery(function () {
+
+                // Создает экземпляр карты и привязывает его к созданному контейнеру
+                var map = new YMaps.Map(YMaps.jQuery("#YMapsID")[0]);
+
+                // Устанавливает начальные параметры отображения карты: центр карты и коэффициент масштабирования
+                map.setCenter(new YMaps.GeoPoint({{report.coord1}}, {{report.coord2}}), 17);
+                map.openBalloon(new YMaps.GeoPoint(
+                    {{report.coord1}}, {{report.coord2}}),
+                    'Место уборки',
+                    {hasCloseButton:false}
+                )
+
+            })
+        </script>
+    {% else %}
+        <p>
+            У выполненной задачи отсутствуют координаты из фотографии. Возможно, у исполнителя выключена геолокация.
+        </p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -17,6 +17,26 @@
     </div>
 </div>
 <div class="pt-5">
+    <h3>Адреса</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">id</th>
+                <th scope="col">Адрес</th>
+                <th scope="col">Информация</th>
+            </tr>
+          </thead>
+        <tbody>
+        {% for address in addresses %}
+            <tr>
+                <th scope="row">{{ address.id }}</th>
+                <td>{{ address }}</td>
+                <td><a href="{% url 'tasks:get_address_info' address.id %}">Отчет по адресу</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
+<div class="pt-5">
     <h3>Дворники</h3>
     <table class="table">
         <thead>

@@ -1,3 +1,14 @@
 from django.contrib import admin
+from .models import Appeal, AppealAnswer
 
-# Register your models here.
+
+class AppealAdmin(admin.ModelAdmin):
+    ...
+
+
+class AppealAnswerAdmin(admin.ModelAdmin):
+    ...
+
+
+admin.site.register(Appeal, AppealAdmin)
+admin.site.register(AppealAnswer, AppealAnswerAdmin)

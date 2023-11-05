@@ -17,17 +17,26 @@ class CustomUserAdmin(UserAdmin):
     )
 
     fieldsets = (
-        *UserAdmin.fieldsets,
         (
-            None,
+            'Персональная информация',
             {
                 'fields': (
                     'photo',
+                    'username',
+                    'first_name',
+                    'last_name',
+                    'middle_name',
+                    'email',
+                    'password',
                     'phone_number',
-                    'company'
+                    'company',
+                    'phone_code'
                 ),
             },
         ),
+        ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser',
+                                    'groups', 'user_permissions',)}),
+        ('Important dates', {'fields': ('last_login', 'date_joined',)})
     )
 
 

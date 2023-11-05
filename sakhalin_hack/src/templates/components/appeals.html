@@ -1,12 +1,83 @@
 {% block content %}
 <div class="pt-5">
-    <h3>Ваши обращения:</h3>
-    {% if appears %}
-        <p>Обращение</p>
-    {% else %}
-        <p>Вы еще не отправили ни одного обращения</p>
-    {% endif %}
+    <div class="pt-5">
+        <h3>Ваши обращения:</h3>
+        {% if appeals %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">id</th>
+                        <th scope="col">Получатель</th>
+                        <th scope="col">Тема обращения</th>
+                        <th scope="col">обращение</th>
+                        <th scope="col">ответ</th>
+                    </tr>
+                  </thead>
+                <tbody>
+                {% for appeal in appeals %}
+                        {% if appeal.is_active %}
+                            <tr>
+                                <th scope="row">{{ appeal.id }}</th>
+                                <td>{{ appeal.recipient }}</td>
+                                <td>{{ appeal.theme }}</td>
+                                <td>{{ appeal.text }}</td>
+                                <td><a>Ответа пока нет</a></td>
+                            </tr>
+                        {% else %}
+                            <tr class="table-success">
+                                <th scope="row">{{ appeal.id }}</th>
+                                <td>{{ appeal.recipient }}</td>
+                                <td>{{ appeal.theme }}</td>
+                                <td>{{ appeal.text }}</td>
+                                <td><a href="{% url 'appeals:view_appeal_answer' appeal.id %}">Посмотреть ответ</a></td>
+                            </tr>
+                        {% endif %}
+                {% endfor %}
+            </table>
+        {% else %}
+            <p>Вы еще не отправили ни одного обращения</p>
+        {% endif %}
+        <a href="{% url 'appeals:create_appeal' %}" class="btn btn-primary mt-2">Написать обращение</a>
+    </div>
 
-    <a href="" class="btn btn-primary">Добавить обращение</a>
+    <div class="pt-5">
+        <h3>Полученные обращения:</h3>
+        {% if received_appeals %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">id</th>
+                        <th scope="col">Отправитель</th>
+                        <th scope="col">Тема обращения</th>
+                        <th scope="col">Обращение</th>
+                        <th scope="col">Ответ</th>
+                    </tr>
+                  </thead>
+                <tbody>
+                {% for appeal in received_appeals %}
+                        {% if appeal.is_active %}
+                            <tr>
+                                <th scope="row">{{ appeal.id }}</th>
+                                <td>{{ appeal.sender }}</td>
+                                <td>{{ appeal.theme }}</td>
+                                <td>{{ appeal.text }}</td>
+                                <td><a href="{% url 'appeals:create_appeal_answer' appeal.id %}" class="btn btn-primary">Ответить</a></td>
+                            </tr>
+                        {% else %}
+                            <tr class="table-success">
+                                <th scope="row">{{ appeal.id }}</th>
+                                <td>{{ appeal.sender }}</td>
+                                <td>{{ appeal.theme }}</td>
+                                <td>{{ appeal.text }}</td>
+                                <td><a href="{% url 'appeals:view_appeal_answer' appeal.id %}">Посмотреть ваш ответ</a></td>
+                            </tr>
+                        {% endif %}
+                {% endfor %}
+            </table>
+        {% else %}
+            <p>Вы еще не получили ни одного обращения</p>
+        {% endif %}
+    </div>
+
 </div>
 {% endblock %}

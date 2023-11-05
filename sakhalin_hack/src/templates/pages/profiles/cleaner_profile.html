@@ -1,17 +1,34 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Здравствуйте, {{ user }}</h1>
-<a href="{% url 'logout' %}">logout</a>
-<h3>Ваши задачи:</h3>
-<div>
+<div class="card mb-3">
+    <div class="row g-0">
+          {% if user.photo %}
+            <div class="col-md-3">
+              <img src="{{ user.photo.url }}" class="img-fluid rounded-start" alt="...">
+            </div>
+        {% endif%}
+            <div class="col-md-8">
+              <div class="card-body">
+                <h1 class="card-title">Здравствуйте, {{ user }}</h1>
+                <p class="card-text"><a href="{% url 'users:logout' %}">Выйти из аккаунта</a></p>
+                  {% include 'components/cleaner_statistic.html' %}
+              </div>
+            </div>
+    </div>
+</div>
+<div class="pt-5">
+    <h3>Ваши задачи за последние 7 дней:</h3>
     <table class="table">
         <thead>
             <tr>
               <th scope="col">id</th>
               <th scope="col">Адрес</th>
               <th scope="col">Исполнитель</th>
+                <th scope="col">Дата</th>
+                <th scope="col">Примечания</th>
               <th scope="col">Отчет</th>
+                <th scope="col">Оценка</th>
             </tr>
           </thead>
         <tbody>
@@ -20,28 +37,74 @@
                 {% if task.is_active %}
                     <tr>
                         <th scope="row">{{ task.id }}</th>
-                        <td>{{ address.city }}, {{ address.district }}, {{ address.street }}</td>
+                        <td>{{ address }}</td>
                         <td>{{ user }}</td>
+                        <td>{{ task.date }}</td>
+                        <td>{{ task.notes }}</td>
                         <td><a href="{% url 'tasks:task_report' task.id %}">Добавить отчет</a></td>
+                        <td>Оценки пока нет</td>
                     </tr>
                 {% else %}
                     <tr class="table-success">
                         <th scope="row">{{ task.id }}</th>
-                        <td>{{ address.city }}, {{ address.district }}, {{ address.street }}</td>
+                        <td>{{ address }}</td>
                         <td>{{ user }}</td>
-                        <td><a href="{% url 'tasks:task_report' task.id %}">Посмотреть отчет</a></td>
+                        <td>{{ task.date }}</td>
+                        <td>{{ task.notes }}</td>
+                        <td><a href="{% url 'tasks:view_report' task.id %}">Посмотреть отчет</a></td>
+                        {% if task.quality_assessment %}
+                            <td><a href="{% url 'tasks:view_quality_assessment' task.id %}">Посмотреть проверку</a></td>
+                        {% else %}
+                            <td><a href="{% url 'tasks:create_quality_assessment' task.id %}">Оценить качество</a></td>
+                        {% endif %}
                     </tr>
                 {% endif %}
             {% endfor %}
         {% endfor %}
     </table>
 
-    <h3>Ваши обращения:</h3>
-    {% if appears %}
-        <p>Обращение</p>
-    {% else %}
-        <p>Вы еще не отправили ни одного обращения</p>
-    {% endif %}
-    <a href="" class="btn btn-primary">Добавить обращение</a>
+    <h3 class="pt-5">Все задачи:</h3>
+    <table class="table mt-2">
+        <thead>
+            <tr>
+              <th scope="col">id</th>
+              <th scope="col">Адрес</th>
+              <th scope="col">Исполнитель
+                <th scope="col">Дата</th>
+              <th scope="col">Отчет</th>
+                <th scope="col">Оценка</th>
+            </tr>
+          </thead>
+        <tbody>
+        {% for task in all_tasks %}
+            {% for address in task.address.all %}
+                {% if task.is_active %}
+                    <tr>
+                        <th scope="row">{{ task.id }}</th>
+                        <td>{{ address }}</td>
+                        <td>{{ user }}</td>
+                        <td>{{ task.date }}</td>
+                        <td><a href="{% url 'tasks:task_report' task.id %}">Добавить отчет</a></td>
+                        <td>Оценки пока нет</td>
+                    </tr>
+                {% else %}
+                    <tr class="table-success">
+                        <th scope="row">{{ task.id }}</th>
+                        <td>{{ address }}</td>
+                        <td>{{ user }}</td>
+                        <td>{{ task.date }}</td>
+                        <td><a href="{% url 'tasks:view_report' task.id %}">Посмотреть отчет</a></td>
+                        {% if task.quality_assessment %}
+                            <td><a href="{% url 'tasks:view_quality_assessment' task.id %}">Посмотреть проверку</a></td>
+                        {% else %}
+                            <td><a href="{% url 'tasks:create_quality_assessment' task.id %}">Оценить качество</a></td>
+                        {% endif %}
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+    </table>
 </div>
+
+{% include 'components/appeals.html' %}
 {% endblock %}

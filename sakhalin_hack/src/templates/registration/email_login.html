@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <form action="{% url 'users:email_login' %}" method="post" class="pt-3">
+        {{ form.as_p }}
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary mt-3">Войти</button>
+    </form>
+{% endblock %}

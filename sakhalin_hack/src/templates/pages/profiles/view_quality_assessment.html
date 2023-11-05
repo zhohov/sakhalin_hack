@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h3>Оценка качества по задаче: #{{ task.id }}</h3>
+<div>
+    <p>Фото выездной проверки:</p>
+    {% if quality_assessment.photo1 %}
+        <img src="{{ quality_assessment.photo1.url }}" style="width: 300px;">
+    {% else %}
+        <p>Фото отстутствует</p>
+    {% endif %}
+    <p>Фото выездной проверки 2:</p>
+    {% if quality_assessment.photo2 %}
+        <img src="{{ quality_assessment.photo2.url }}" style="width: 300px;">
+    {% else %}
+        <p>Фото отстутствует</p>
+    {% endif %}
+    <p>Фото выездной проверки 3:</p>
+    {% if quality_assessment.photo3 %}
+        <img src="{{ quality_assessment.photo3.url }}" style="width: 300px;">
+    {% else %}
+        <p>Фото отстутствует</p>
+    {% endif %}
+
+    <p>Исполнитель: {{ task_report.cleaner }}</p>
+    <p>Заказчик: {{ task_report.manager }}</p>
+    <p>Дата и время выполнения {{ task_report.date }}</p>
+    <p>Статус {{ task_report.marks }}</p>
+    <p>Примечания {{ task_report.notes }}</p>
+    <p>Оценка {{ task_report.mark }}</p>
+    <h5>Выполненная работа на карте:</h5>
+
+    {% if task_report.coord1 %}
+
+        <div id="YMapsID" style="width:600px;height:400px"></div>
+        <script type="text/javascript">
+            // Создает обработчик события window.onLoad
+            YMaps.jQuery(function () {
+
+                // Создает экземпляр карты и привязывает его к созданному контейнеру
+                var map = new YMaps.Map(YMaps.jQuery("#YMapsID")[0]);
+
+                // Устанавливает начальные параметры отображения карты: центр карты и коэффициент масштабирования
+                map.setCenter(new YMaps.GeoPoint({{task_report.coord1}}, {{task_report.coord2}}), 17);
+                map.openBalloon(new YMaps.GeoPoint(
+                    {{task_report.coord1}}, {{task_report.coord2}}),
+                    'Место уборки',
+                    {hasCloseButton:false}
+                )
+
+            })
+        </script>
+    {% else %}
+        <p>
+            У выполненной задачи отсутствуют координаты из фотографии. Возможно, у исполнителя выключена геолокация.
+        </p>
+    {% endif %}
+</div>
+{% endblock %}
