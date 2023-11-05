@@ -1,0 +1,57 @@
+version: '3.9'
+services:
+  db:
+    image: postgres:15.2
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: "trust"
+      POSTGRES_USER:
+      POSTGRES_PASSWORD:
+      POSTGRES_DB:
+    env_file:
+      - ./sakhalin_hack/.env
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5433:5433"
+    networks:
+      - db
+
+  backend:
+    build:
+      context: ./sakhalin_hack
+    volumes:
+      - media:/app/src/media
+      - static:/app/src/static
+    env_file:
+      - sakhalin_hack/.env
+    restart: always
+    networks:
+      - db
+      - nginx_network
+    depends_on:
+      - db
+
+  nginx:
+    build:
+      context: ./nginx
+    volumes:
+      - static:/app/src/static
+      - media:/app/src/media
+    ports:
+      - "80:80"
+    networks:
+      - nginx_network
+    depends_on:
+      - db
+      - backend
+
+networks:
+  nginx_network:
+    driver: bridge
+  db:
+    driver: bridge
+
+volumes:
+  pgdata: {}
+  media:
+  static:
