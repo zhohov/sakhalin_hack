@@ -55,7 +55,7 @@
                         {% if task.quality_assessment %}
                             <td><a href="{% url 'tasks:view_quality_assessment' task.id %}">Посмотреть проверку</a></td>
                         {% else %}
-                            <td><a href="{% url 'tasks:create_quality_assessment' task.id %}">Оценить качество</a></td>
+                            <td>Оценки пока нет</td>
                         {% endif %}
                     </tr>
                 {% endif %}
@@ -97,7 +97,7 @@
                         {% if task.quality_assessment %}
                             <td><a href="{% url 'tasks:view_quality_assessment' task.id %}">Посмотреть проверку</a></td>
                         {% else %}
-                            <td><a href="{% url 'tasks:create_quality_assessment' task.id %}">Оценить качество</a></td>
+                            <td>Оценки пока нет</td>
                         {% endif %}
                     </tr>
                 {% endif %}

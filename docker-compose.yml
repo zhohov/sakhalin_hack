@@ -3,10 +3,9 @@ services:
   db:
     image: postgres:15.2
     environment:
-      POSTGRES_HOST_AUTH_METHOD: "trust"
-      POSTGRES_USER:
-      POSTGRES_PASSWORD:
-      POSTGRES_DB:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=sakhalin_hack
     env_file:
       - ./sakhalin_hack/.env
     volumes:

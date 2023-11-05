@@ -91,7 +91,8 @@ def get_cleaner_tasks(request, cleaner_id: int) -> render:
     middle_mark = 0
     for mark in marks:
         middle_mark += int(mark.mark)
-    middle_mark = middle_mark / completed_task.count()
+    if middle_mark != 0:
+        middle_mark = middle_mark / completed_task.count()
 
     data = {
         'cleaner': cleaner,
@@ -203,7 +204,8 @@ def get_address_info(request, address_id) -> render:
     middle_mark = 0
     for mark in marks:
         middle_mark += int(mark.mark)
-    middle_mark = middle_mark / completed_task.count()
+    if middle_mark != 0:
+        middle_mark = middle_mark / completed_task.count()
 
     context = {
         'address': address,
@@ -213,5 +215,6 @@ def get_address_info(request, address_id) -> render:
         'not_completed_task': all_tasks.count() - completed_task.count(),
         'middle_mark': middle_mark,
     }
+
 
     return render(request, 'pages/profiles/uk_employee/address_info.html', context=context)

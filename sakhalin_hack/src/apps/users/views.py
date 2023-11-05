@@ -26,7 +26,8 @@ def user_profile(request) -> render:
             middle_mark = 0
             for mark in marks:
                 middle_mark += int(mark.mark)
-            middle_mark = middle_mark / completed_task.count()
+            if middle_mark != 0:
+                middle_mark = middle_mark / completed_task.count()
             print(completed_task)
             all_tasks = Task.objects.filter(cleaner__id=request.user.id)
 
