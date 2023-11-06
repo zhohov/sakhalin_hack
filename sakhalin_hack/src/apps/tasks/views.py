@@ -14,6 +14,7 @@ from .services.image_service import image_coordinates, get_address, verified_add
 
 @login_required(login_url="/users/login/")
 def cleaner_task_report(request, task_id: int) -> render:
+    address = ...
     task = Task.objects.filter(pk=task_id).first()
     task_report = CompletedTask.objects.filter(task__id=task_id).first()
     task_address = task.address.all().first()
@@ -40,24 +41,24 @@ def cleaner_task_report(request, task_id: int) -> render:
                 address = get_address(coord_1, coord_2)
                 print(address)
                 print(verified_address(address, task_address))
-                if verified_address(address, task_address):
-                    if form.is_valid():
-                        form.save()
-                        task_report.verified_address = True
-                        task_report.save()
-                        task.is_active = False
-                        task.save()
-                else:
-                    form.save()
-                    task.is_active = False
-                    task.save()
-
 
             except:
                 print('Не удалось проверить координаты фото')
 
         except KeyError:
             print('Фото не загружено')
+
+        if verified_address(address, task_address):
+            if form.is_valid():
+                form.save()
+                task_report.verified_address = True
+                task_report.save()
+                task.is_active = False
+                task.save()
+        else:
+            form.save()
+            task.is_active = False
+            task.save()
 
         return redirect('/users/profile/')
 
@@ -67,6 +68,7 @@ def cleaner_task_report(request, task_id: int) -> render:
         form.fields['cleaner'].initial = str(task.cleaner.id)
         form.fields['address'].initial = str(task_address.id)
         form.fields['manager'].initial = str(task.manager.id)
+        form.fields['date'].initial = str(task.date)
         form.fields['coord1'].initial = ''
         form.fields['coord1'].initial = ''
 
@@ -215,6 +217,5 @@ def get_address_info(request, address_id) -> render:
         'not_completed_task': all_tasks.count() - completed_task.count(),
         'middle_mark': middle_mark,
     }
-
 
     return render(request, 'pages/profiles/uk_employee/address_info.html', context=context)

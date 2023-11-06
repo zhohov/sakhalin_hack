@@ -20,7 +20,7 @@ LOGGING = {
         'file': {
             "level": LOG_LEVEL,
             'class': "logging.handlers.TimedRotatingFileHandler",
-            'filename': "/app/src/logs/django/debug.log",
+            'filename': "logs/django/debug.log",
             'when': 'midnight',
             'interval': 1,
             'backupCount': 10,

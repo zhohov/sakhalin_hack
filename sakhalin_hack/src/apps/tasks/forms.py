@@ -20,7 +20,7 @@ class TaskReport(ModelForm):
         model = CompletedTask
         fields = '__all__'
         widgets = {
-            'date': widgets.DateTimeInput(attrs={'type': 'datetime-local'}),
+            'date': widgets.HiddenInput(),
             'task': widgets.HiddenInput(),
             'cleaner': widgets.HiddenInput(),
             'manager': widgets.HiddenInput(),
@@ -28,6 +28,7 @@ class TaskReport(ModelForm):
             'coord1': widgets.HiddenInput(),
             'coord2': widgets.HiddenInput(),
             'is_active': widgets.HiddenInput(),
+            'address': widgets.HiddenInput(),
         }
 
 
@@ -41,5 +42,5 @@ class QualityAssessmentForm(ModelForm):
             'manager': widgets.HiddenInput(),
             'task': widgets.HiddenInput(),
             'task_report': widgets.HiddenInput(),
-
+            'address': widgets.HiddenInput(),
         }

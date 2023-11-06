@@ -46,6 +46,8 @@ class CompletedTask(models.Model):
     photo = models.ImageField(verbose_name='Фото уборки', upload_to='./clearing_photo/%Y/%m/%d/', blank=True)
     photo2 = models.ImageField(verbose_name='Фото уборки', upload_to='./clearing_photo/%Y/%m/%d/', blank=True)
     photo3 = models.ImageField(verbose_name='Фото уборки', upload_to='./clearing_photo/%Y/%m/%d/', blank=True)
+    photo4 = models.ImageField(verbose_name='Фото уборки', upload_to='./clearing_photo/%Y/%m/%d/', blank=True)
+    photo5 = models.ImageField(verbose_name='Фото уборки', upload_to='./clearing_photo/%Y/%m/%d/', blank=True)
     task = models.ForeignKey(Task, verbose_name='Задача', on_delete=models.CASCADE)
 
     cleaner = models.ForeignKey(CustomUser,
