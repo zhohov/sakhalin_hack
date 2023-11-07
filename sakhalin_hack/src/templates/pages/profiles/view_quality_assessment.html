@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<button class="btn btn-primary no-print mt-5 mb-5" onclick="window.print()">Сформировать PDF</button>
 <h3>Оценка качества по задаче: #{{ task.id }}</h3>
 <div>
     <p>Фото выездной проверки:</p>
@@ -21,13 +22,13 @@
     {% else %}
         <p>Фото отстутствует</p>
     {% endif %}
-
+    <p>Адрес: {{ task_report.address }}</p>
     <p>Исполнитель: {{ task_report.cleaner }}</p>
     <p>Заказчик: {{ task_report.manager }}</p>
     <p>Дата и время выполнения {{ task_report.date }}</p>
     <p>Статус {{ task_report.marks }}</p>
-    <p>Примечания {{ task_report.notes }}</p>
-    <p>Оценка {{ quality_assessment.mark }}</p>
+    <p>Примечания: {{ task_report.notes }}</p>
+    <p>Оценка: {{ quality_assessment.mark }}</p>
     <h5>Выполненная работа на карте:</h5>
 
     {% if task_report.coord1 %}
@@ -52,7 +53,7 @@
         </script>
     {% else %}
         <p>
-            У выполненной задачи отсутствуют координаты из фотографии. Возможно, у исполнителя выключена геолокация.
+            У выполненной задачи отсутствуют координаты из фотографии. Возможно, у исполнителя выключена геопозиция.
         </p>
     {% endif %}
 </div>

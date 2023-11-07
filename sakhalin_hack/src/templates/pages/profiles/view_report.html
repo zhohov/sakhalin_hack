@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<button class="btn btn-primary no-print mt-5 mb-5" onclick="window.print()">Сформировать PDF</button>
 <h3>Отчет по задаче: #{{ task.id }}</h3>
 <div>
     <p>Фото:</p>
@@ -14,6 +15,12 @@
     {% endif %}
     {% if report.photo3 %}
         <img src="{{ report.photo3.url }}" style="width: 300px;">
+    {% endif %}
+    {% if report.photo4 %}
+        <img src="{{ report.photo4.url }}" style="width: 300px;">
+    {% endif %}
+    {% if report.photo5 %}
+        <img src="{{ report.photo5.url }}" style="width: 300px;">
     {% endif %}
     <div class="pt-5">
         <p>Исполнитель: {{ report.cleaner }}</p>

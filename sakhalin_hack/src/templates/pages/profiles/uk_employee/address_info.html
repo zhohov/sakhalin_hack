@@ -1,9 +1,98 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h3>Сттатистика по адресу {{ address }}</h3>
+<button class="btn btn-primary no-print mt-5 mb-5" onclick="window.print()">Сформировать PDF</button>
+<h3>Статистика по адресу {{ address }}</h3>
 <p>Количество задач: {{ task_count }}</p>
 <p>Количество выполненных задач: {{ completed_task }}</p>
 <p>Количество не выполненных задач: {{ not_completed_task }}</p>
 <p>Средняя оценка: {{ middle_mark }}</p>
+
+<div>
+    <h3 class="pt-5">Задачи по адресу {{ address }} (поледние 7 дней)</h3>
+    <table class="table mt-5">
+        <thead>
+            <tr>
+                <th scope="col">id</th>
+                <th scope="col">Адрес</th>
+                <th scope="col">Исполнитель</th>
+                <th scope="col">Дата</th>
+                <th scope="col">Выполнение</th>
+                <th scope="col">Оценка</th>
+            </tr>
+          </thead>
+        <tbody>
+        {% for task in all_tasks %}
+            {% for address in task.address.all %}
+                {% if task.is_active %}
+                    <tr>
+                        <th scope="row">{{ task.id }}</th>
+                        <td>{{ address }}</td>
+                        <td>{{ cleaner.last_name }} {{ cleaner.first_name }} {{ cleaner.middle_name }}</td>
+                        <td>{{ task.date }}</td>
+                        <td>Отчета пока нет</td>
+                        <td>Оценки качества пока нет</td>
+                    </tr>
+                {% else %}
+                    <tr class="table-success">
+                        <th scope="row">{{ task.id }}</th>
+                        <td>{{ address }}</td>
+                        <td>{{ cleaner.last_name }} {{ cleaner.first_name }} {{ cleaner.middle_name }}</td>
+                        <td>{{ task.date }}</td>
+                        <td><a href="{% url 'tasks:view_report' task.id %}">Отчет</a></td>
+                        {% if task.quality_assessment %}
+                            <td><a href="{% url 'tasks:view_quality_assessment' task.id %}">{{ quality_assessment }}</a></td>
+                        {% else %}
+                            <td>Оценки качества пока нет</td>
+                        {% endif %}
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+    </table>
+
+    <h3 class="pt-5">Задачи по адресу {{ address }} (за все время)</h3>
+    <table class="table mt-5">
+        <thead>
+            <tr>
+                <th scope="col">id</th>
+                <th scope="col">Адрес</th>
+                <th scope="col">Исполнитель</th>
+                <th scope="col">Дата</th>
+                <th scope="col">Отчет</th>
+                <th scope="col">Оценка</th>
+            </tr>
+          </thead>
+        <tbody>
+        {% for task in all_tasks %}
+            {% for address in task.address.all %}
+                {% if task.is_active %}
+                    <tr>
+                        <th scope="row">{{ task.id }}</th>
+                        <td>{{ address }}</td>
+                        <td>{{ cleaner.last_name }} {{ cleaner.first_name }} {{ cleaner.middle_name }}</td>
+                        <td>{{ task.date }}</td>
+                        <td>Отчета пока нет</td>
+                        <td>Оценки качества пока нет</td>
+                    </tr>
+                {% else %}
+                    <tr class="table-success">
+                        <th scope="row">{{ task.id }}</th>
+                        <td>{{ address }}</td>
+                        <td>{{ cleaner.last_name }} {{ cleaner.first_name }} {{ cleaner.middle_name }}</td>
+                        <td>{{ task.date }}</td>
+                        <td><a href="{% url 'tasks:view_report' task.id %}">Отчет</a></td>
+                        {% if task.quality_assessment %}
+                            <td><a href="{% url 'tasks:view_quality_assessment' task.id %}">Посмотреть проверку</a></td>
+                        {% else %}
+                            <td>Оценки качества пока нет</td>
+                        {% endif %}
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+    </table>
+</div>
+
+
 {% endblock %}
