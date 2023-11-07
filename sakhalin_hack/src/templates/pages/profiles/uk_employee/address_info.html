@@ -41,7 +41,7 @@
                         <td>{{ task.date }}</td>
                         <td><a href="{% url 'tasks:view_report' task.id %}">Отчет</a></td>
                         {% if task.quality_assessment %}
-                            <td><a href="{% url 'tasks:view_quality_assessment' task.id %}">{{ quality_assessment }}</a></td>
+                            <td><a href="{% url 'tasks:view_quality_assessment' task.id %}">Посмотреть проверку</a></td>
                         {% else %}
                             <td>Оценки качества пока нет</td>
                         {% endif %}

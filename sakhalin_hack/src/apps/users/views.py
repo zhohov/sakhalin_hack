@@ -44,7 +44,7 @@ def user_profile(request) -> render:
             print(all_tasks.count())
             return render(request, template_name='pages/profiles/cleaner_profile.html', context=data)
 
-        elif user_group.name == 'Управдома':
+        elif user_group.name == 'Управляющие':
             user_company = request.user.company.all().first()
             cleaners = CustomUser.objects.all().filter(groups__name='Дворники', company__name=user_company.name)
             data = {

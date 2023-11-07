@@ -29,18 +29,14 @@ def cleaner_task_report(request, task_id: int) -> render:
         try:
             file = request.FILES['photo']
             print(file)
-
             image = exif.Image(file)
             try:
                 coord_1 = image_coordinates(image.gps_longitude, image.gps_longitude_ref)
                 coord_2 = image_coordinates(image.gps_latitude, image.gps_latitude_ref)
-                form.data['coord1'] = image_coordinates(image.gps_longitude, image.gps_longitude_ref)
-                form.data['coord2'] = image_coordinates(image.gps_latitude, image.gps_latitude_ref)
-
-                print(coord_1, coord_2)
-                address = get_address(coord_1, coord_2)
-                print(address)
-                print(verified_address(address, task_address))
+                if coord_1 is not None:
+                    form.data['coord1'] = image_coordinates(image.gps_longitude, image.gps_longitude_ref)
+                    form.data['coord2'] = image_coordinates(image.gps_latitude, image.gps_latitude_ref)
+                    address = get_address(coord_1, coord_2)
 
             except:
                 print('Не удалось проверить координаты фото')
@@ -48,13 +44,14 @@ def cleaner_task_report(request, task_id: int) -> render:
         except KeyError:
             print('Фото не загружено')
 
-        if verified_address(address, task_address):
-            if form.is_valid():
-                form.save()
-                task_report.verified_address = True
-                task_report.save()
-                task.is_active = False
-                task.save()
+        if coord_1:
+            if verified_address(address, task_address):
+                if form.is_valid():
+                    form.save()
+                    task_report.verified_address = True
+                    task_report.save()
+                    task.is_active = False
+                    task.save()
         else:
             form.save()
             task.is_active = False

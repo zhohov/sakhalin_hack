@@ -28,7 +28,7 @@ class Company(models.Model):
 
 
 class CustomUser(AbstractUser):
-    photo = models.ImageField(verbose_name='Фото профиля', upload_to='./cleaners_photo/', blank=True)
+    photo = models.FileField(verbose_name='Фото профиля', upload_to='./cleaners_photo/', blank=True)
     company = models.ManyToManyField(Company, blank=True)
     phone_number = models.CharField(verbose_name='Номер телефона', unique=True, null=True, blank=True, max_length=11)
     email = models.EmailField(unique=True)

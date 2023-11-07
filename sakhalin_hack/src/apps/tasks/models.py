@@ -43,11 +43,11 @@ class CompletedTask(models.Model):
          )
     ]
 
-    photo = models.ImageField(verbose_name='Фото уборки', upload_to='./clearing_photo/%Y/%m/%d/', blank=True)
-    photo2 = models.ImageField(verbose_name='Фото уборки', upload_to='./clearing_photo/%Y/%m/%d/', blank=True)
-    photo3 = models.ImageField(verbose_name='Фото уборки', upload_to='./clearing_photo/%Y/%m/%d/', blank=True)
-    photo4 = models.ImageField(verbose_name='Фото уборки', upload_to='./clearing_photo/%Y/%m/%d/', blank=True)
-    photo5 = models.ImageField(verbose_name='Фото уборки', upload_to='./clearing_photo/%Y/%m/%d/', blank=True)
+    photo = models.FileField(verbose_name='Фото уборки', upload_to='./clearing_photo/%Y/%m/%d/', blank=True)
+    photo2 = models.FileField(verbose_name='Фото уборки', upload_to='./clearing_photo/%Y/%m/%d/', blank=True)
+    photo3 = models.FileField(verbose_name='Фото уборки', upload_to='./clearing_photo/%Y/%m/%d/', blank=True)
+    photo4 = models.FileField(verbose_name='Фото уборки', upload_to='./clearing_photo/%Y/%m/%d/', blank=True)
+    photo5 = models.FileField(verbose_name='Фото уборки', upload_to='./clearing_photo/%Y/%m/%d/', blank=True)
     task = models.ForeignKey(Task, verbose_name='Задача', on_delete=models.CASCADE)
 
     cleaner = models.ForeignKey(CustomUser,
@@ -113,17 +113,17 @@ class QualityAssessment(models.Model):
     address = models.ForeignKey(Address, verbose_name='Адрес проверки', on_delete=models.CASCADE)
     date = models.DateTimeField(verbose_name='Дата проверки')
 
-    photo1 = models.ImageField(
+    photo1 = models.FileField(
         verbose_name='Фото выездной проверки (обязательное при проведении)',
         upload_to='./quality_assessment/%Y/%m/%d/',
         blank=True, null=True
     )
-    photo2 = models.ImageField(
+    photo2 = models.FileField(
         verbose_name='Фото выездной проверки (необязательное)',
         upload_to='./quality_assessment/%Y/%m/%d/',
         blank=True, null=True
     )
-    photo3 = models.ImageField(
+    photo3 = models.FileField(
         verbose_name='Фото выездной проверки (необязательное)',
         upload_to='./quality_assessment/%Y/%m/%d/',
         blank=True, null=True
