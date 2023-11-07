@@ -16,7 +16,6 @@ from .services.image_service import image_coordinates, get_address, verified_add
 def cleaner_task_report(request, task_id: int) -> render:
     address = ...
     task = Task.objects.filter(pk=task_id).first()
-    task_report = CompletedTask.objects.filter(task__id=task_id).first()
     task_address = task.address.all().first()
 
     if request.method == 'POST':
@@ -47,6 +46,7 @@ def cleaner_task_report(request, task_id: int) -> render:
         if coord_1:
             if verified_address(address, task_address):
                 if form.is_valid():
+                    task_report = CompletedTask.objects.filter(task__id=task_id).first()
                     form.save()
                     task_report.verified_address = True
                     task_report.save()

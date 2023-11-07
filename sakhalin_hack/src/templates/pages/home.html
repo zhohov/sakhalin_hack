@@ -15,7 +15,7 @@
                     <a href="{% url 'users:user_profile' %}">Перейти в профиль</a>
                 {% else %}
                     <a href="{% url 'users:phone_number_login' %}">Вход для дворников</a><br>
-                    <a href="{% url 'users:email_login' %}">Вход для управляющих</a><br>
+                    <a href="{% url 'users:email_login' %}">Вход для управдома</a><br>
                     <a href="{% url 'users:email_login' %}">Вход для сотрудников ЖЭК</a>
                 {% endif %}
             {% endblock %}
