@@ -1,18 +1,20 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h3>Ответ на обращение: #{{ appeal.id }} от {{ appeal.sender }} к {{ appeal.recipient }}</h3>
+{% if appeal.sender == None %}
+    <h3>Ответ на обращение: #{{ appeal.id }} от {{ appeal.company }} к {{ appeal.recipient }}</h3>
+{% else %}
+    <h3>Ответ на обращение: #{{ appeal.id }} от {{ appeal.sender }} к {{ appeal.company }}</h3>
+{% endif %}
 <div>
     <div class="pt-3">
         <p>Тема обращения: {{ appeal.theme }}</p>
         <p>Текст обращения: {{ appeal.text }}</p>
-        <p>Дата обращения: {{ appeal.date }}</p>
     </div>
 
     <div class="pt-3">
         <p>Тема ответа: {{ answer.theme }}</p>
         <p>Текст ответа: {{ answer.text }}</p>
-        <p>Дата ответа: {{ answer.date }}</p>
     </div>
 </div>
 {% endblock %}

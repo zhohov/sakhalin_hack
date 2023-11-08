@@ -150,7 +150,7 @@ def add_task(request, cleaner_id: int) -> render:
         return redirect('/users/profile/')
     else:
         cleaner = CustomUser.objects.all().filter(pk=cleaner_id).first()
-        company = cleaner.company.all().first()
+        company = cleaner.company.first()
 
         form = AddTask()
         form.fields['cleaner'].initial = str(cleaner_id)

@@ -1,5 +1,6 @@
 import datetime
 import random
+from types import NoneType
 
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
@@ -59,6 +60,8 @@ def user_profile(request) -> render:
 
         elif user_group.name == 'Сотрудники ЖЭК':
             user_company = request.user.company.all().first()
+            sender_appeals = Appeal.objects.all().filter(company__id=user_company.id, sender__id=None)
+            received_appeals = Appeal.objects.all().filter(company__id=user_company.id).exclude(sender__id=None)
             addresses = user_company.address.all()
             cleaners = CustomUser.objects.all().filter(groups__name='Дворники', company__name=user_company.name)
             data = {

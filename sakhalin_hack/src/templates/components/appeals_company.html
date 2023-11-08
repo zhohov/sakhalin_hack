@@ -18,7 +18,7 @@
                         {% if appeal.is_active %}
                             <tr>
                                 <th scope="row">{{ appeal.id }}</th>
-                                <td>{{ appeal.company }}</td>
+                                <td>{{ appeal.recipient }}</td>
                                 <td>{{ appeal.theme }}</td>
                                 <td>{{ appeal.text }}</td>
                                 <td><a>Ответа пока нет</a></td>
@@ -26,7 +26,7 @@
                         {% else %}
                             <tr class="table-success">
                                 <th scope="row">{{ appeal.id }}</th>
-                                <td>{{ appeal.company }}</td>
+                                <td>{{ appeal.recipient }}</td>
                                 <td>{{ appeal.theme }}</td>
                                 <td>{{ appeal.text }}</td>
                                 <td><a href="{% url 'appeals:view_appeal_answer' appeal.id %}">Посмотреть ответ</a></td>
@@ -58,7 +58,7 @@
                         {% if appeal.is_active %}
                             <tr>
                                 <th scope="row">{{ appeal.id }}</th>
-                                <td>{{ appeal.company }}</td>
+                                <td>{{ appeal.sender }}</td>
                                 <td>{{ appeal.theme }}</td>
                                 <td>{{ appeal.text }}</td>
                                 <td><a href="{% url 'appeals:create_appeal_answer' appeal.id %}" class="btn btn-primary">Ответить</a></td>
@@ -66,7 +66,7 @@
                         {% else %}
                             <tr class="table-success">
                                 <th scope="row">{{ appeal.id }}</th>
-                                <td>{{ appeal.company }}</td>
+                                <td>{{ appeal.sender }}</td>
                                 <td>{{ appeal.theme }}</td>
                                 <td>{{ appeal.text }}</td>
                                 <td><a href="{% url 'appeals:view_appeal_answer' appeal.id %}">Посмотреть ваш ответ</a></td>

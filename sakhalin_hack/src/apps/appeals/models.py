@@ -1,5 +1,5 @@
 from django.db import models
-from apps.users.models import CustomUser
+from apps.users.models import CustomUser, Company
 
 
 class Appeal(models.Model):
@@ -9,13 +9,24 @@ class Appeal(models.Model):
     sender = models.ForeignKey(CustomUser,
                                verbose_name='Отправитель',
                                on_delete=models.CASCADE,
-                               related_name='appeal_sender'
+                               related_name='appeal_sender',
+                               blank=True,
+                               null=True
                                )
     recipient = models.ForeignKey(CustomUser,
                                   verbose_name='Получатель',
                                   on_delete=models.CASCADE,
-                                  related_name='appeal_recipient'
+                                  related_name='appeal_recipient',
+                                  blank=True,
+                                  null=True
                                   )
+    company = models.ForeignKey(Company,
+                                verbose_name='Получатель',
+                                on_delete=models.CASCADE,
+                                related_name='appeal_company',
+                                blank=True,
+                                null=True
+                                )
 
     is_active = models.BooleanField(verbose_name='Активное обращение', default=True)
 
@@ -35,13 +46,24 @@ class AppealAnswer(models.Model):
     sender = models.ForeignKey(CustomUser,
                                verbose_name='Отправитель',
                                on_delete=models.CASCADE,
-                               related_name='appeal_answer_sender'
+                               related_name='appeal_answer_sender',
+                               blank=True,
+                               null=True
                                )
     recipient = models.ForeignKey(CustomUser,
                                   verbose_name='Получатель',
                                   on_delete=models.CASCADE,
-                                  related_name='appeal_answer_recipient'
+                                  related_name='appeal_answer_recipient',
+                                  blank=True,
+                                  null=True
                                   )
+    company = models.ForeignKey(Company,
+                                verbose_name='Получатель',
+                                on_delete=models.CASCADE,
+                                related_name='appeal_answer_company',
+                                blank=True,
+                                null=True
+                                )
 
     class Meta:
         verbose_name = 'Ответ на обращение'
