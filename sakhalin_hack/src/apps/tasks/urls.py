@@ -11,5 +11,6 @@ urlpatterns = [
     path('create_quality_assessment/<int:task_id>/', views.create_quality_assessment, name='create_quality_assessment'),
     path('view_quality_assessment/<int:task_id>/', views.view_quality_assessment, name='view_quality_assessment'),
     path('get_address_info/<int:address_id>/', views.get_address_info, name='get_address_info'),
+    path('get_all_cleaner_tasks/<int:cleaner_id>', views.get_all_cleaner_tasks, name='get_all_cleaner_tasks')
 
 ]

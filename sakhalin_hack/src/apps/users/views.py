@@ -32,6 +32,7 @@ def user_profile(request) -> render:
             all_tasks = Task.objects.filter(cleaner__id=request.user.id)
 
             data = {
+                'title': 'Личный кабинет',
                 'all_tasks': all_tasks,
                 'tasks': tasks,
                 'appeals': sender_appeals,
@@ -48,6 +49,7 @@ def user_profile(request) -> render:
             user_company = request.user.company.all().first()
             cleaners = CustomUser.objects.all().filter(groups__name='Дворники', company__name=user_company.name)
             data = {
+                'title': 'Личный кабинет',
                 'company': user_company,
                 'cleaners': cleaners,
                 'appeals': sender_appeals,
@@ -60,6 +62,7 @@ def user_profile(request) -> render:
             addresses = user_company.address.all()
             cleaners = CustomUser.objects.all().filter(groups__name='Дворники', company__name=user_company.name)
             data = {
+                'title': 'Личный кабинет',
                 'company': user_company,
                 'cleaners': cleaners,
                 'addresses': addresses,
@@ -92,7 +95,7 @@ def email_login(request) -> render:
     else:
         form = EmailLogin()
 
-    return render(request, 'registration/email_login.html', context={'form': form})
+    return render(request, 'registration/email_login.html', context={'title': 'Вход в аккаунт', 'form': form})
 
 
 def phone_number_login(request) -> render:
@@ -115,7 +118,7 @@ def phone_number_login(request) -> render:
     else:
         form = PhoneForm()
 
-    return render(request, 'registration/phone_number_form.html', context={'form': form})
+    return render(request, 'registration/phone_number_form.html', context={'title': 'Вход в аккаунт', 'form': form})
 
 
 def otp_verified(request, user_id: int) -> render:
@@ -139,5 +142,5 @@ def otp_verified(request, user_id: int) -> render:
     else:
         form = OTPForm()
 
-    return render(request, 'registration/otp_verified_form.html', context={'form': form, 'user_id': user_id})
+    return render(request, 'registration/otp_verified_form.html', context={'title': 'Вход в аккаунт', 'form': form, 'user_id': user_id})
 

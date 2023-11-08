@@ -17,14 +17,11 @@ class Appeal(models.Model):
                                   related_name='appeal_recipient'
                                   )
 
-    date = models.DateTimeField(verbose_name='Дата и время')
-
     is_active = models.BooleanField(verbose_name='Активное обращение', default=True)
 
     class Meta:
         verbose_name = 'Обращение'
         verbose_name_plural = 'Обращения'
-        ordering = ('-date',)
 
     def __str__(self) -> str:
         return f'Тема: {self.theme}, от: {self.sender}'
@@ -45,12 +42,10 @@ class AppealAnswer(models.Model):
                                   on_delete=models.CASCADE,
                                   related_name='appeal_answer_recipient'
                                   )
-    date = models.DateTimeField(verbose_name='Дата и время')
 
     class Meta:
         verbose_name = 'Ответ на обращение'
         verbose_name_plural = 'Ответы на обращения'
-        ordering = ('-date',)
 
     def __str__(self) -> str:
         return f'Тема: {self.theme}, от: {self.sender}'

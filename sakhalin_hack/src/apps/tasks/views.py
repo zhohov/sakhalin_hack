@@ -70,6 +70,7 @@ def cleaner_task_report(request, task_id: int) -> render:
         form.fields['coord1'].initial = ''
 
         context = {
+            'title': 'Добавить отчет',
             'task': task,
             'form': form,
         }
@@ -94,8 +95,8 @@ def get_cleaner_tasks(request, cleaner_id: int) -> render:
         middle_mark = middle_mark / completed_task.count()
 
     data = {
+        'title': 'Задачи дворника',
         'cleaner': cleaner,
-        'all_tasks': all_tasks,
         'tasks': tasks,
         'task_count': all_tasks.count(),
         'completed_task': completed_task.count(),
@@ -104,6 +105,35 @@ def get_cleaner_tasks(request, cleaner_id: int) -> render:
     }
 
     return render(request, 'pages/profiles/cleaner_info.html', context=data)
+
+
+@login_required(login_url="/users/login/")
+def get_all_cleaner_tasks(request, cleaner_id: int) -> render:
+    cleaner = CustomUser.objects.all().filter(pk=cleaner_id).first()
+    enddate = datetime.datetime.now(tz=datetime.timezone.utc)
+    startdate = enddate - timedelta(days=7)
+    tasks = Task.objects.all().filter(cleaner__id=cleaner_id, date__range=[startdate, enddate])
+    all_tasks = Task.objects.all().filter(cleaner__id=cleaner_id)
+
+    completed_task = CompletedTask.objects.all().filter(cleaner__id=cleaner_id, marks='Выполнена')
+    marks = QualityAssessment.objects.all().filter(cleaner__id=cleaner_id)
+    middle_mark = 0
+    for mark in marks:
+        middle_mark += int(mark.mark)
+    if middle_mark != 0:
+        middle_mark = middle_mark / completed_task.count()
+
+    data = {
+        'title': 'Задачи дворника',
+        'cleaner': cleaner,
+        'all_tasks': all_tasks,
+        'task_count': all_tasks.count(),
+        'completed_task': completed_task.count(),
+        'not_completed_task': all_tasks.count() - completed_task.count(),
+        'middle_mark': middle_mark,
+    }
+
+    return render(request, 'pages/profiles/cleaner_all_tasks_info.html', context=data)
 
 
 @login_required(login_url="/users/login/")
@@ -120,12 +150,15 @@ def add_task(request, cleaner_id: int) -> render:
         return redirect('/users/profile/')
     else:
         cleaner = CustomUser.objects.all().filter(pk=cleaner_id).first()
+        company = cleaner.company.all().first()
 
         form = AddTask()
         form.fields['cleaner'].initial = str(cleaner_id)
         form.fields['manager'].initial = str(request.user.id)
+        form.fields['address'].queryset = Address.objects.filter(company__id=f'{company.id}')
 
         context = {
+            'title': 'Добавить задачу',
             'cleaner': cleaner,
             'form': form,
         }
@@ -139,6 +172,7 @@ def view_report(request, task_id: int) -> render:
     report = CompletedTask.objects.filter(task__id=task_id).first()
 
     context = {
+        'title': 'Просмотр отчета',
         'report': report,
         'task': task,
     }
@@ -173,6 +207,7 @@ def create_quality_assessment(request, task_id: int) -> render:
         form.fields['address'].initial = address.id
 
         context = {
+            'title': 'Проверка качества',
             'form': form,
             'task': task,
         }
@@ -186,6 +221,7 @@ def view_quality_assessment(request, task_id: int) -> render:
     task_report = CompletedTask.objects.filter(task__id=task_id).first()
     quality_assessment = QualityAssessment.objects.filter(task__id=task_id).first()
     context = {
+        'title': 'Просмотр оценки качества',
         'task': task,
         'task_report': task_report,
         'quality_assessment': quality_assessment
@@ -207,6 +243,7 @@ def get_address_info(request, address_id) -> render:
         middle_mark = middle_mark / completed_task.count()
 
     context = {
+        'title': 'Информация по адресу',
         'address': address,
         'all_tasks': all_tasks,
         'task_count': all_tasks.count(),

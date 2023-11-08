@@ -14,7 +14,7 @@ class Task(models.Model):
                                 on_delete=models.CASCADE,
                                 related_name='task_manager'
                                 )
-    address = models.ManyToManyField(Address)
+    address = models.ManyToManyField(Address, verbose_name='Адрес')
     date = models.DateTimeField(verbose_name='Дата и время')
     notes = models.TextField(verbose_name='Примечания по работе', null=True, blank=True)
 
@@ -66,6 +66,11 @@ class CompletedTask(models.Model):
 
     coord1 = models.CharField(verbose_name='Координата 1', null=True, blank=True)
     coord2 = models.CharField(verbose_name='Координата 2', null=True, blank=True)
+
+    check1 = models.BooleanField(verbose_name='Условие 1', default=False)
+    check2 = models.BooleanField(verbose_name='Условие 2', default=False)
+    check3 = models.BooleanField(verbose_name='Условие 3', default=False)
+
     marks = models.CharField(verbose_name='Работа', choices=CHOICES)
     notes = models.TextField(verbose_name='Примечания по работе', blank=True, null=True)
 

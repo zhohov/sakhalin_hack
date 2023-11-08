@@ -23,9 +23,8 @@
 </div>
 <div class="mb-5">
     <a href="{% url 'tasks:add_task' cleaner.id %}" class="btn btn-primary mt-3 no-print">Добавить задачу</a>
-    <a href="{% url 'tasks:get_all_cleaner_tasks' cleaner.id %}" class="btn btn-primary no-print mt-3">Все задачи</a>
     <button class="btn btn-primary no-print mt-3" onclick="window.print()">Сформировать PDF</button>
-    <h3 class="pt-5">Задачи {{ cleaner.last_name }} {{ cleaner.first_name }} {{ cleaner.middle_name }} (поледние 7 дней)</h3>
+    <h3 class="pt-5">Задачи {{ cleaner.last_name }} {{ cleaner.first_name }} {{ cleaner.middle_name }} (за все время)</h3>
     <table class="table mt-5">
         <thead>
             <tr>
@@ -38,7 +37,7 @@
             </tr>
           </thead>
         <tbody>
-        {% for task in tasks %}
+        {% for task in all_tasks %}
             {% for address in task.address.all %}
                 {% if task.is_active %}
                     <tr>
