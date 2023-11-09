@@ -1,15 +1,17 @@
 import datetime
+import os
 import random
-from types import NoneType
 
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
+from django.core.mail import send_mail
 
 from apps.tasks.models import Task, CompletedTask, QualityAssessment
 from apps.appeals.models import Appeal, AppealAnswer
 from .models import CustomUser
-from .forms import EmailLogin, OTPForm, PhoneForm
+from .forms import EmailLogin, OTPForm, PhoneForm, EmailPassword
+from .services import get_password
 
 
 @login_required(login_url="/users/login/")
@@ -99,6 +101,32 @@ def email_login(request) -> render:
         form = EmailLogin()
 
     return render(request, 'registration/email_login.html', context={'title': 'Вход в аккаунт', 'form': form})
+
+
+def get_email_password(request) -> render:
+    if request.method == 'POST':
+        form = EmailPassword(request.POST)
+
+        if form.is_valid():
+            email = form.data['email']
+            user = CustomUser.objects.filter(email=email).first()
+
+            if user is not None:
+                pwd = get_password()
+                user.set_password(pwd)
+                user.save()
+                send_mail(subject='Пароль для входа в аккаунт',
+                          from_email=os.getenv('EMAIL_HOST_USER'),
+                          message=f'Ваш пароль для входа в аккаунт {pwd}',
+                          recipient_list=[email, ],
+                          fail_silently=False
+                          )
+
+        return redirect('/users/email_login/')
+    else:
+        form = EmailPassword()
+
+    return render(request, 'registration/get_email_password.html', context={'title': 'Получить пароль', 'form': form})
 
 
 def phone_number_login(request) -> render:

@@ -6,6 +6,10 @@ class EmailLogin(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput)
 
 
+class EmailPassword(forms.Form):
+    email = forms.EmailField()
+
+
 class PhoneForm(forms.Form):
     phone_number = forms.CharField()
 

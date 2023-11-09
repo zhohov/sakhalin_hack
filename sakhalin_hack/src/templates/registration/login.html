@@ -9,7 +9,7 @@
 </head>
     <body>
         <div class="container pt-5">
-            <h1>Вход в аккаунт</h1>
+            <h3>Вход в аккаунт</h3>
             {% block content %}
                 <form action="{% url 'users:login' %}" method="post" class="pt-3">
                     {{ form.as_p }}

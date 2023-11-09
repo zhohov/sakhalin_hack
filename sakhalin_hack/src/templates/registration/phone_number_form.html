@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    <h3>Вход в аккаунт по номеру телефона</h3>
     <form action="{% url 'users:phone_number_login' %}" method="post" class="pt-3">
         {{ form.as_p }}
         {% csrf_token %}

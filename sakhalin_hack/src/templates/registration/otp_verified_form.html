@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    <h3>Подтверждение телефона</h3>
     <form action="{% url 'users:otp_verified' user_id %}" method="post" class="pt-3">
         {{ form.as_p }}
         {% csrf_token %}
-        <button type="submit" class="btn btn-primary mt-3">Отправить код</button>
+        <button type="submit" class="btn btn-primary mt-3">Войти</button>
     </form>
 {% endblock %}

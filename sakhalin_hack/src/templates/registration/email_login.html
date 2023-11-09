@@ -1,9 +1,11 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    <h3>Вход в аккаунт по email</h3>
     <form action="{% url 'users:email_login' %}" method="post" class="pt-3">
         {{ form.as_p }}
         {% csrf_token %}
         <button type="submit" class="btn btn-primary mt-3">Войти</button>
+        <a href="{% url 'users:get_email_password' %}">Если вы входите впервые, вам требуется получить пароль</a>
     </form>
 {% endblock %}

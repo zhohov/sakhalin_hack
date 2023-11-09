@@ -1,6 +1,5 @@
 from django.contrib.auth.backends import ModelBackend
-from django.contrib.auth.models import User
-from .models import CustomUser
+from apps.users.models import CustomUser
 
 
 class PasswordlessAuthBackend(ModelBackend):
