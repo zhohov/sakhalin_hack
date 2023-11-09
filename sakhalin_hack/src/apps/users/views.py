@@ -1,6 +1,8 @@
 import datetime
 import os
 import random
+from calendar import HTMLCalendar, LocaleHTMLCalendar
+import re
 
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
@@ -11,7 +13,7 @@ from apps.tasks.models import Task, CompletedTask, QualityAssessment
 from apps.appeals.models import Appeal, AppealAnswer
 from .models import CustomUser
 from .forms import EmailLogin, OTPForm, PhoneForm, EmailPassword
-from .services import get_password
+from .services import get_password, get_calendar
 
 
 @login_required(login_url="/users/login/")
@@ -34,6 +36,12 @@ def user_profile(request) -> render:
             print(completed_task)
             all_tasks = Task.objects.filter(cleaner__id=request.user.id)
 
+            now = datetime.datetime.now()
+            year = now.year
+            month = now.month
+
+            cal = '<h3 class="pt-3">Календарь для</h3>' + '<table><tr><td>' + get_calendar(all_tasks, now, year, month) + '</td><td>' + get_calendar(all_tasks, now, year, month+1) + '</td></tr></table>'
+
             data = {
                 'title': 'Личный кабинет',
                 'all_tasks': all_tasks,
@@ -44,6 +52,7 @@ def user_profile(request) -> render:
                 'completed_task': completed_task.count(),
                 'not_completed_task': all_tasks.count()-completed_task.count(),
                 'middle_mark': middle_mark,
+                'cal': cal,
             }
             print(all_tasks.count())
             return render(request, template_name='pages/profiles/cleaner_profile.html', context=data)
