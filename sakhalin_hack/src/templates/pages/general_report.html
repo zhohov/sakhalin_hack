@@ -4,37 +4,68 @@
 <button class="btn btn-primary no-print mt-5 mb-5" onclick="window.print()">Сформировать PDF</button>
 <h3>Отчет о работе ЖЭК в городе</h3>
 <div>
-        <div class="mt-3" id="YMapsID" style="width:600px;height:400px"></div>
+        <div class="mt-3" id="map" style="width:600px;height:400px"></div>
+
         <script type="text/javascript">
-            // Создает обработчик события window.onLoad
-            YMaps.jQuery(function () {
-                const data = {{ companies_json|safe }}
+            ymaps.ready(init);
+            const data = {{ companies_json|safe }}
 
-                // Создает экземпляр карты и привязывает его к созданному контейнеру
-                var map = new YMaps.Map(YMaps.jQuery("#YMapsID")[0]);
+            function init(){
+                var myMap = new ymaps.Map("map", {
+                    center: [data[0]['fields']['coord1'], data[0]['fields']['coord2']],
+                    zoom: 7
+                });
 
-                // Устанавливает начальные параметры отображения карты: центр карты и коэффициент масштабирования
-                map.setCenter(new YMaps.GeoPoint(data[1]['fields']['coord2'], data[1]['fields']['coord1']), 10);
+                var GeoCollection = new ymaps.GeoObjectCollection()
+
                 for (var i = 0; i < data.length; i++){
-                        // Задает опции метки и отображает метку на карте.
-                        var placemark = new YMaps.Placemark(new YMaps.GeoPoint(data[i]['fields']['coord2'], data[i]['fields']['coord1']), {draggable: 1,
-                            hintOptions: {
-                                maxWidth: 100,
-                                showTimeout: 200,
-                                offset: new YMaps.Point(5, 5)
-                            },
-                            balloonOptions: {
-                                maxWidth: 70,
-                                hasCloseButton: false,
-                                mapAutoPan: 0
-                            }
-                        });
-                        placemark.name = data[i]['fields']['name'];
-                        placemark.description = "Описание";
-                        map.addOverlay(placemark);
-                }
-            })
+                        console.log(data.length)
+                        console.log(i)
+                        GeoCollection.add(new ymaps.Placemark([data[i]['fields']['coord1'], data[i]['fields']['coord2']], {}, {
+                            // Задаем стиль метки (метка в виде круга).
+                            preset: "islands#circleDotIcon",
+                            // Задаем цвет метки (в формате RGB).
+                            iconColor: '#ff0000'
+                        }))
 
+                        if (data[i]['fields']['polygon_coords'] != '') {
+                                console.log(i)
+                                var polygon_coords = []
+
+                                coords = data[i]['fields']['polygon_coords'].split(' ')
+                                console.log(data[i]['fields']['polygon_coords'])
+                                for (var j = 0; j < coords.length-2; j+=2){
+                                        coord = []
+                                        coord.unshift(coords[j+1])
+                                        coord.unshift(coords[j])
+                                        polygon_coords.unshift(coord)
+                                }
+
+                                console.log(data[i]['fields']['polygon_coords'].split(' ').pop())
+
+
+                                GeoCollection.add(new ymaps.Polygon([
+                                    polygon_coords,
+                                ], {
+                                    balloonContent: data[i]['fields']['name'],
+                                }, {
+                                    fillColor: data[i]['fields']['polygon_coords'].split(' ').pop(),
+                                    strokeColor: data[i]['fields']['polygon_coords'].split(' ').pop(),
+                                    // Делаем полигон прозрачным для событий карты.
+                                    interactivityModel: 'default#transparent',
+                                    strokeWidth: 8,
+                                    opacity: 0.5
+                                }))
+
+
+
+                        } else {
+                                console.log('Coords is None')
+                        }
+                }
+                myMap.geoObjects.add(GeoCollection)
+                myMap.setBounds(GeoCollection.getBounds());
+            }
 
         </script>
 </div>
