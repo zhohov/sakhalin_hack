@@ -1,12 +1,15 @@
 import datetime
+import json
 from datetime import timedelta
 
 from django.shortcuts import render, redirect
+from django.core import serializers
+
 import exif
 
 from .forms import TaskReport, AddTask, QualityAssessmentForm
 from .models import Task, CompletedTask, QualityAssessment
-from apps.users.models import CustomUser, Address
+from apps.users.models import CustomUser, Address, Company
 from django.contrib.auth.decorators import login_required
 
 from .services.image_service import image_coordinates, get_address, verified_address
@@ -253,3 +256,18 @@ def get_address_info(request, address_id) -> render:
     }
 
     return render(request, 'pages/profiles/uk_employee/address_info.html', context=context)
+
+
+@login_required(login_url="/users/login/")
+def get_general_report(request) -> render:
+    companies = Company.objects.all()
+    companies_json = serializers.serialize('json', Company.objects.all())
+    cleaners = CustomUser.objects.all()
+    completed_tasks = CompletedTask.objects.all()
+    quality_assessment = QualityAssessment.objects.all()
+
+    context = {
+        'companies': companies,
+        'companies_json': json.loads(json.dumps(companies_json)),
+    }
+    return render(request, 'pages/general_report.html', context=context)

@@ -19,6 +19,7 @@ exif = "^1.6.0"
 requests = "^2.31.0"
 gunicorn = "^21.2.0"
 certifi = "^2023.7.22"
+django-filter = "^23.3"
 
 
 [build-system]

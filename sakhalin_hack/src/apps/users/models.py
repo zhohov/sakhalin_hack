@@ -19,6 +19,11 @@ class Company(models.Model):
     name = models.CharField(verbose_name='Название')
     address = models.ManyToManyField(Address, verbose_name='Адреса', blank=True)
 
+    coord1 = models.CharField(verbose_name='Координата 1', null=True, blank=True)
+    coord2 = models.CharField(verbose_name='Координата 2', null=True, blank=True)
+
+    polygon_coords = models.TextField(verbose_name='Координаты полигона', null=True, blank=True)
+
     class Meta:
         verbose_name = 'Управляющая компания'
         verbose_name_plural = 'Управляющие компании'
