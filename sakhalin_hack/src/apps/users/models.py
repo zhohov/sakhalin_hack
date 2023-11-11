@@ -6,6 +6,8 @@ class Address(models.Model):
     city = models.CharField(verbose_name='Город', null=False)
     street = models.CharField(verbose_name='Улица', null=False)
     build = models.CharField(verbose_name='Дом', null=True)
+    coord1 = models.CharField(verbose_name='Координата 1', null=True, blank=True)
+    coord2 = models.CharField(verbose_name='Координата 2', null=True, blank=True)
 
     class Meta:
         verbose_name = 'Адрес'

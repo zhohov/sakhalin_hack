@@ -260,14 +260,60 @@ def get_address_info(request, address_id) -> render:
 
 @login_required(login_url="/users/login/")
 def get_general_report(request) -> render:
+    all_addresses = Address.objects.all()
     companies = Company.objects.all()
     companies_json = serializers.serialize('json', Company.objects.all())
-    cleaners = CustomUser.objects.all()
+    cleaners = CustomUser.objects.filter(groups__name='Дворники')
     completed_tasks = CompletedTask.objects.all()
     quality_assessment = QualityAssessment.objects.all()
 
+    middle_mark = 0
+    for mark in quality_assessment:
+        middle_mark += int(mark.mark)
+    if middle_mark != 0:
+        middle_mark = middle_mark / quality_assessment.count()
+
+    companies_rating: dict = {}
+
+    for company in companies:
+        rating = 0
+        k = 0
+        address_quality_assessment = ...
+        addresses = company.address.all()
+        for address in addresses:
+            address_quality_assessment = QualityAssessment.objects.filter(address__id=address.id)
+            for mark in address_quality_assessment:
+                rating += int(mark.mark)
+                k += 1
+        if address_quality_assessment.count() != 0:
+            rating = rating / address_quality_assessment.count()
+
+        companies_rating[company.name] = rating
+
+    address_task_count = []
+    for address in all_addresses:
+        address_task = {}
+        tasks = CompletedTask.objects.filter(address__id=address.id)
+        address_task['name'] = f'{address}'
+        address_task['coord1'] = address.coord1
+        address_task['coord2'] = address.coord2
+        address_task['tasks'] = tasks.count()
+        address_task_count.append(address_task)
+
+    print(address_task_count)
+
+    for quality in quality_assessment:
+        report = CompletedTask.objects.filter(task__id=quality.task.id).first()
+        print(report.photo)
+
     context = {
         'companies': companies,
+        'companies_count': companies.count(),
+        'completed_tasks_count': completed_tasks.count(),
+        'cleaners_count': cleaners.count(),
+        'middle_mark': middle_mark,
+        'companies_rating': json.loads(json.dumps(companies_rating)),
         'companies_json': json.loads(json.dumps(companies_json)),
+        'address_task_count': json.loads(json.dumps(address_task_count)),
     }
     return render(request, 'pages/general_report.html', context=context)
