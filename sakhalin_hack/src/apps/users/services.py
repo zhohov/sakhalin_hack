@@ -1,6 +1,7 @@
 import secrets
 import string
 import datetime
+import locale
 from calendar import LocaleHTMLCalendar
 from apps.tasks.models import Task
 
@@ -27,6 +28,8 @@ def get_calendar() -> str:
 
 def set_calendar(now, year, month) -> str:
     cal = LocaleHTMLCalendar(locale='ru_RU.UTF-8').formatmonth(year, month)
+
+    locale.setlocale(locale.LC_ALL,'ru_RU.UTF-8')
 
     for i in range(1, 31):
         tasks = Task.objects.filter(date__day=i, date__month=month)

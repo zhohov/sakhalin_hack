@@ -13,7 +13,7 @@
 	2. Посмотреть логи `docker logs <container_id>`
 9. Для входа в админку нужно создать суперпользователя
 	1. Запустить `docker ps` 
-	2. Выполнить `docker exec <backend_container_id> bash`
+	2. Выполнить `docker exec -it <backend_container_id> bash`
 	3. Выполнить `python manage.py createsuperuser`
 10. Остановка проекта `docker-compose stop`
 11. Запуск после остановки `docker-compose start`
