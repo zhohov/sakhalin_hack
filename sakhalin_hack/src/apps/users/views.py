@@ -89,16 +89,14 @@ def email_login(request) -> render:
         if form.is_valid():
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
-            print(email, password)
-            username = CustomUser.objects.get(email=email).username
-            user = authenticate(request, username=username, password=password)
-            print(user)
-            if user is not None:
-                print(user)
+            try:
+                username = CustomUser.objects.get(email=email).username
+                user = authenticate(request, username=username, password=password)
                 login(request, user)
                 return redirect('/users/profile/')
 
-            return redirect('/users/email_login/')
+            except CustomUser.DoesNotExists:
+                return redirect('/users/email_login/')
 
     else:
         form = EmailLogin()
